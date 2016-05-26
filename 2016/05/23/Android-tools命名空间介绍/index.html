@@ -1,0 +1,728 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="uncategorized" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="简介我们在开发中经常能碰到 tools 这个属性，这里就对他的完整的功能进行一个介绍。官方也有相关的介绍，本文的主要内容多都来自官方文档。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[Android] tools命名空间介绍">
+<meta property="og:url" content="http://auhah.cn/2016/05/23/Android-tools命名空间介绍/index.html">
+<meta property="og:site_name" content="Android Developer">
+<meta property="og:description" content="简介我们在开发中经常能碰到 tools 这个属性，这里就对他的完整的功能进行一个介绍。官方也有相关的介绍，本文的主要内容多都来自官方文档。">
+<meta property="og:updated_time" content="2016-05-23T06:30:58.258Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[Android] tools命名空间介绍">
+<meta name="twitter:description" content="简介我们在开发中经常能碰到 tools 这个属性，这里就对他的完整的功能进行一个介绍。官方也有相关的介绍，本文的主要内容多都来自官方文档。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> [Android] tools命名空间介绍 | Android Developer </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-78050009-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Android Developer</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                [Android] tools命名空间介绍
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-23T11:00:33+08:00" content="2016-05-23">
+              2016-05-23
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/23/Android-tools命名空间介绍/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/05/23/Android-tools命名空间介绍/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>我们在开发中经常能碰到 tools 这个属性，这里就对他的完整的功能进行一个介绍。<br>官方也有相关的<a href="http://tools.android.com/tech-docs/tools-attributes" target="_blank" rel="external">介绍</a>，本文的主要内容多都来自官方文档。<br><a id="more"></a></p>
+<h2 id="tools-属性"><a href="#tools-属性" class="headerlink" title="tools 属性"></a>tools 属性</h2><p>这里讲的 tools，是在xml中的命名空间为 <code>http://schemas.android.com/tools</code> 的属性，在 <code>Android Studio</code> 中，输入 toolsNs 后IDE会为我们引入 tools 属性。tools 属性在打包 apk 的时候会被去掉，不会影响 apk 的任何属性。</p>
+<h3 id="tools-ignore"><a href="#tools-ignore" class="headerlink" title="tools:ignore"></a>tools:ignore</h3><blockquote>
+<p>This attribute can be set on any XML element, and is a comma separated list of lint issue ID’s that should be ignored on this element or any of its children, recursively.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;string name=&quot;show_all_apps&quot; tools:ignore=&quot;MissingTranslation&quot;&gt;All&lt;/string&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>Used by: Lint</p>
+<p>这个属性可以被设置在任何 XML 属性上，他的值是用逗号分隔的问题 ID 的列表，会在该元素和他的子元素上生效。<br>作用是告诉 lint 忽略某些警告。</p>
+<h4 id="e-g"><a href="#e-g" class="headerlink" title="e.g."></a>e.g.</h4><p>我们有这样的一个 view ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;ImageView</span><br><span class="line">    android:layout_width=&quot;wrap_content&quot;</span><br><span class="line">    android:layout_height=&quot;wrap_content&quot;</span><br><span class="line">    android:src=&quot;@mipmap/ic_launcher&quot;</span><br><span class="line">    /&gt;</span><br></pre></td></tr></table></figure>
+<p>由于没有在里面设置 <code>contentDescription</code> 属性，lint 会在 view 上标一个黄色的警告，这时候我们可以在里面加一行 <code>tools:ignore=&quot;ContentDescription&quot;</code> 来忽略 <code>contentDescription</code> 的警告。</p>
+<h3 id="tools-targetApi"><a href="#tools-targetApi" class="headerlink" title="tools:targetApi"></a>tools:targetApi</h3><blockquote>
+<p>This attribute is like the @TargetApi annotation in Java classes: it lets you specify an API level, either as an integer or as code name, that this element is known to be running on.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;GridLayout tools:targetApi=&quot;ICE_CREAM_SANDWICH&quot; &gt;</span><br></pre></td></tr></table></figure></p>
+<p>Used by: Lint</p>
+</blockquote>
+<p>他的作用和 Java 类中的 <code>@TargetApi</code> 注解的作用是一样的，值可以是整数值也可以是版本的代号名字。</p>
+<h3 id="tools-locale"><a href="#tools-locale" class="headerlink" title="tools:locale"></a>tools:locale</h3><blockquote>
+<p>This attribute can be set on the root element in a resource value file and should correspond to a language and optionally a region. This will let tools know what language (locale) the strings in the file are assumed to be. For example, values/strings.xml can have this root element:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;resources xmlns:tools=&quot;http://schemas.android.com/tools&quot; tools:locale=&quot;es&quot;&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>Now we know that the language used for strings in the default values folder is Spanish rather than English.<br>Used by: Lint, Studio (to disable spell checking in non-English resource files)</p>
+<p>在资源文件的根元素上设置，例如在 <code>values/strings.xml</code> 中可以设置 <code>tools:local=es</code> 来告诉 IDE 该资源文件中是西班牙语，这样可以在非英语的资源文件中禁用拼写检查。</p>
+<h3 id="tools-context"><a href="#tools-context" class="headerlink" title="tools:context"></a>tools:context</h3><blockquote>
+<p>This attribute is typically set on the root element in a layout XML file, and records which activity the layout is associated with (at designtime, since obviously a layout can be used by more than one layout). This will for example be used by the layout editor to guess a default theme, since themes are defined in the Manifest and are associated with activities, not layouts. You can use the same dot prefix as in manifests to just specify the activity class without the full application package name as a prefix.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;android.support.v7.widget.GridLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot; </span><br><span class="line">  xmlns:tools=&quot;http://schemas.android.com/tools&quot;</span><br><span class="line">  tools:context=&quot;.MainActivity&quot; ... &gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>Used by: Layout editors in Studio &amp; Eclipse, Lint</p>
+<p>给一个布局文件指定一个 Activity ，在预览的时候可以看到该布局文件在该 Activity 的主题中的效果。</p>
+<h3 id="tools-layout"><a href="#tools-layout" class="headerlink" title="tools:layout"></a>tools:layout</h3><blockquote>
+<p>This attribute is typically set in a <fragment> tag and is used to record which layout you want to see rendered at designtime (at runtime, this will be determined by the actions of the fragment class listed by the tag).<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;fragment android:name=&quot;com.example.master.ItemListFragment&quot; tools:layout=&quot;@android:layout/list_content&quot; /&gt;</span><br></pre></td></tr></table></figure></fragment></p>
+</blockquote>
+<p>Used by: Layout editors in Studio &amp; Eclipse</p>
+<p>通常用在 <code>&lt;fragment&gt;</code> 标签中，可以在预览中看到你想在 fragment 中呈现的内容。</p>
+<h3 id="tools-listitem-listheader-listfooter"><a href="#tools-listitem-listheader-listfooter" class="headerlink" title="tools:listitem / listheader / listfooter"></a>tools:listitem / listheader / listfooter</h3><blockquote>
+<p>These attributes can be used on a <listview> (or other AdapterView children like <gridview>, <expandablelistview> etc) to specify layouts to use for the list items, as well as list headers and list footers, at designtime. The tool will fill in dummy data to show a list with some representative contents.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;ListView</span><br><span class="line">    android:id=&quot;@android:id/list&quot;</span><br><span class="line">    android:layout_width=&quot;match_parent&quot;</span><br><span class="line">    android:layout_height=&quot;match_parent&quot;</span><br><span class="line">    tools:listitem=&quot;@android:layout/simple_list_item_2&quot; /&gt;</span><br></pre></td></tr></table></figure></expandablelistview></gridview></listview></p>
+</blockquote>
+<p>Used by: Layout editors in Studio &amp; Eclipse</p>
+<p>该属性被使用在 <code>ListView</code> 或 <code>GridView</code>，<code>ExpandableListView</code> 等 <code>AdapterView</code> 的子类上，可以在布局文件中将列表条目，header 和 footer 填充进去预览。<br>在 <code>RecyclerView</code> 上可以使用 <code>tools:listitem</code>。</p>
+<h3 id="tools-showIn"><a href="#tools-showIn" class="headerlink" title="tools:showIn"></a>tools:showIn</h3><blockquote>
+<p>Attribute set on the root element of a layout that <include>‘ed by another layout. This allows you to point to one of the layouts which includes this layout, and at designtime this included layout will be rendered with the outer layout surrounding it. That allows you to view and edit the layout “in context”.  Requires Studio 0.5.8 or later. More information in the <a href="http://tools.android.com/recent/androidstudio058released" target="_blank" rel="external">release announcement</a>.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;TextView xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">  xmlns:tools=&quot;http://schemas.android.com/tools&quot;</span><br><span class="line">  android:text=&quot;@string/hello_world&quot;</span><br><span class="line">  android:layout_width=&quot;wrap_content&quot;</span><br><span class="line">  android:layout_height=&quot;wrap_content&quot;</span><br><span class="line">  tools:showIn=&quot;@layout/activity_main&quot; /&gt;</span><br></pre></td></tr></table></figure></include></p>
+</blockquote>
+<p>Used by: Layout editor in Studio</p>
+<p>该属性需要被设置在被其他布局用 <code>&lt;include&gt;</code> 标签引用的布局中，可以在编辑的时候显示他的外部布局，这可以让你在他的上下文环境中查看和编辑布局文件。<br>在 <code>Android Studio</code> 中使用 <code>Refactor--&gt;Extract--&gt;Layout</code> 操作将一个布局中的 view 独立成一个布局文件的时候，会自动添加 <code>tools:showIn=&quot;...&quot;</code>。</p>
+<h3 id="tools-menu"><a href="#tools-menu" class="headerlink" title="tools:menu"></a>tools:menu</h3><blockquote>
+<p>Attribute set on the root element of a layout to configure the menus to be shown in the Action Bar. Android Studio tries to figure out which menus to use in the ActionBar by looking at the onCreateOptionsMenu() method in the activity linked to the layout (by tools:context). This allows you to override that search and explicitly state which menus to show. The value is a comma separated list of ids (without @id/ or any such prefix). You can also use the file names of the menu xml without the .xml extension. Requires Studio 0.8.0 or later.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">    xmlns:tools=&quot;http://schemas.android.com/tools&quot;</span><br><span class="line">    android:orientation=&quot;vertical&quot;</span><br><span class="line">    android:layout_width=&quot;match_parent&quot;</span><br><span class="line">    android:layout_height=&quot;match_parent&quot;</span><br><span class="line">    tools:menu=&quot;menu1,menu2&quot; /&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>Used by: Layout editor in Studio</p>
+<p><code>Android Studio</code> 会默认的从 <code>Activity</code> 的 <code>onCreateOptionsMenu()</code> 方法中找到 <code>Action Bar</code> 使用的菜单布局，设置 <code>tools:menu</code> 后可以覆盖 <code>Android Studio</code> 的这项操作来显示你想显示的菜单。他的值是用逗号分隔的 id 列表（不需要 @id/ 或其他任何前缀）。你也可以用不带 <code>.xml</code> 的 xml 文件名。需要 <code>Android Studio 0.8.0</code> 或之后的版本。</p>
+<h3 id="tools-actionBarNavMode"><a href="#tools-actionBarNavMode" class="headerlink" title="tools:actionBarNavMode"></a>tools:actionBarNavMode</h3><blockquote>
+<p>Attribute set on the root element of a layout to configure the navigation mode used by the Action Bar. Possible values include: “standard”, “list” and “tabs” Requires Studio 0.8.0 or later.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">    xmlns:tools=&quot;http://schemas.android.com/tools&quot;</span><br><span class="line">    android:orientation=&quot;vertical&quot;</span><br><span class="line">    android:layout_width=&quot;match_parent&quot;</span><br><span class="line">    android:layout_height=&quot;match_parent&quot;</span><br><span class="line">    tools:actionBarNavMode=&quot;tabs&quot; /&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>Used by: Layout editor in Studio</p>
+<p>这个属性告诉 IDE 当前 <code>Action Bar</code> 的显示模式，他的值包括：</p>
+<ul>
+<li>standard</li>
+<li>list</li>
+<li>tabs</li>
+</ul>
+<h3 id="shrink相关属性"><a href="#shrink相关属性" class="headerlink" title="shrink相关属性"></a>shrink相关属性</h3><p>Gradle 在配置了 <code>shrinkResources true</code> 的时候会在打包时删掉一部分不需要的资源文件，我们可以通过 tools 的 shrink 相关属性来控制 Gradle 的这一行为。</p>
+<h4 id="tools-shrinkMode"><a href="#tools-shrinkMode" class="headerlink" title="tools:shrinkMode"></a>tools:shrinkMode</h4><blockquote>
+<p>When using resource shrinking to automatically strip out unused resources, you can specify whether the Gradle plugin should play it safe and whitelist all resources that might be referenced via a getIdentifier lookup from string resources, or whether it should only consider resources explicitly listed in code and in other resources. The default is to play it safe; this is shrinkMode=”safe”. To instead have the Gradle plugin only consider explicitly referenced resources, use shrinkMode=”strict”. In that case, you can use the tools:keep and tools:discard attributes to explicitly list resources to keep or remove.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;resources xmlns:tools=&quot;http://schemas.android.com/tools&quot;</span><br><span class="line">    tools:shrinkMode=&quot;safe&quot;</span><br><span class="line">    tools:discard=&quot;@layout/unused2&quot; /&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>Used by: Gradle plugin with resource shrinking. <a href="http://tools.android.com/tech-docs/new-build-system/resource-shrinking" target="_blank" rel="external">More information about resource shrinking</a>.</p>
+<p>在 resource 文件中指定 shrink 模式，你可以指定 Gradle 在处理该资源文件时候的方式，默认的值为 safe，你也可以将它指定为 strict（只会保留有明确引用的资源，以及处理被 <code>tools:keep</code> 和 <code>tools:discard</code> 标注的资源）</p>
+<h4 id="tools-keep"><a href="#tools-keep" class="headerlink" title="tools:keep"></a>tools:keep</h4><blockquote>
+<p>When using resource shrinking to automatically strip out unused resources, and when using shrinkMode=”strict”, you can specify specific resources to keep (typically because they are referenced in an indirect way via runtime code, such as Resources#getIdentifier(some dynamically computed resource name). </p>
+<p>The value is a comma separated list of resource references (and a globbing pattern is allowed.)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;resources xmlns:tools=&quot;http://schemas.android.com/tools&quot;</span><br><span class="line">    tools:keep=&quot;@layout/l_used*_c,@layout/l_used_a,@layout/l_used_b*&quot; /&gt;</span><br></pre></td></tr></table></figure>
+<p>Used by: Gradle plugin with resource shrinking. <a href="http://tools.android.com/tech-docs/new-build-system/resource-shrinking" target="_blank" rel="external">More information about resource shrinking</a>.</p>
+</blockquote>
+<p>在 <code>tools:shrinkMode=&quot;strict&quot;</code> 的时候生效，指定某资源文件不被删除。通常的使用场景是在代码中使用了该资源文件而在 xml 没有引用，则需要给该资源设定 <code>tools:keep</code> 属性。属性值为逗号分隔的 id 列表。</p>
+<h4 id="tools-discard"><a href="#tools-discard" class="headerlink" title="tools:discard"></a>tools:discard</h4><blockquote>
+<p>When using resource shrinking to automatically strip out unused resources, you can specify specific resources to discard (typically because the resource is referenced in some way that you know does not affect your app, or the Gradle plugin has incorrectly deduced that the resource is referenced (which can happen because resource identifiers are inlined by the compiler, so the resource analyzer can’t tell the difference between a genuinely referenced resource and an integer value in the program that happens to have the same value.)</p>
+<p>The value is a comma separated list of resource references (and a globbing pattern is allowed.)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;resources xmlns:tools=&quot;http://schemas.android.com/tools&quot;</span><br><span class="line">    tools:discard=&quot;@layout/unused2&quot; /&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>Used by: Gradle plugin with resource shrinking. <a href="http://tools.android.com/tech-docs/new-build-system/resource-shrinking" target="_blank" rel="external">More information about resource shrinking</a>.</p>
+<p>在 <code>tools:shrinkMode=&quot;strict&quot;</code> 的时候生效，指定某资源文件需要删除。在你确定该资源文件无效的时候使用。</p>
+<h2 id="其他：设计时属性"><a href="#其他：设计时属性" class="headerlink" title="其他：设计时属性"></a>其他：设计时属性</h2><blockquote>
+<p>In layouts, any other attribute can be aliasing a builtin Android attribute. For example, this can let you set a designtime-only alternate text which is used in the tools, but not at runtime. For more, see <a href="http://tools.android.com/tips/layout-designtime-attributes" target="_blank" rel="external">Designtime Layout Attributes</a>.</p>
+</blockquote>
+<p>在布局文件中，任何属性都可以将 <code>andorid:</code> 替换为 <code>tools:</code> 来获得一个只在设计时生效的属性，比如你可以设置 <code>tools:text=&quot;abc&quot;</code> 来预览文字，在运行时不会显示。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/20/[转载] RxJava操作符分类/" rel="next" title="RxJava操作符分类">
+                <i class="fa fa-chevron-left"></i> RxJava操作符分类
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/24/hello-world/" rel="prev" title="Hello World">
+                Hello World <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://o7gnfawoo.bkt.clouddn.com/ava.png"
+               alt="auhah" />
+          <p class="site-author-name" itemprop="name">auhah</p>
+          <p class="site-description motion-element" itemprop="description">throw NoGirlFriendException</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/auhah" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tools-属性"><span class="nav-number">2.</span> <span class="nav-text">tools 属性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tools-ignore"><span class="nav-number">2.1.</span> <span class="nav-text">tools:ignore</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#e-g"><span class="nav-number">2.1.1.</span> <span class="nav-text">e.g.</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tools-targetApi"><span class="nav-number">2.2.</span> <span class="nav-text">tools:targetApi</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tools-locale"><span class="nav-number">2.3.</span> <span class="nav-text">tools:locale</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tools-context"><span class="nav-number">2.4.</span> <span class="nav-text">tools:context</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tools-layout"><span class="nav-number">2.5.</span> <span class="nav-text">tools:layout</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tools-listitem-listheader-listfooter"><span class="nav-number">2.6.</span> <span class="nav-text">tools:listitem / listheader / listfooter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tools-showIn"><span class="nav-number">2.7.</span> <span class="nav-text">tools:showIn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tools-menu"><span class="nav-number">2.8.</span> <span class="nav-text">tools:menu</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tools-actionBarNavMode"><span class="nav-number">2.9.</span> <span class="nav-text">tools:actionBarNavMode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shrink相关属性"><span class="nav-number">2.10.</span> <span class="nav-text">shrink相关属性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#tools-shrinkMode"><span class="nav-number">2.10.1.</span> <span class="nav-text">tools:shrinkMode</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tools-keep"><span class="nav-number">2.10.2.</span> <span class="nav-text">tools:keep</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tools-discard"><span class="nav-number">2.10.3.</span> <span class="nav-text">tools:discard</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他：设计时属性"><span class="nav-number">3.</span> <span class="nav-text">其他：设计时属性</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">auhah</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'auhah';
+      var disqus_identifier = '2016/05/23/Android-tools命名空间介绍/';
+      var disqus_title = '[Android] tools命名空间介绍';
+      var disqus_url = 'http://auhah.cn/2016/05/23/Android-tools命名空间介绍/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

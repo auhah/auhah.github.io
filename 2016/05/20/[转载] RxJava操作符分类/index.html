@@ -1,0 +1,773 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="RxJava,转载," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="本文转载自: LengYue’s Blog / RxJava操作符分类
+ReactiveX的每种编程语言的实现都实现了一组操作符的集合。不同的实现之间有很多重叠的部分，也有一些操作符只存在特定的实现中。每种实现都倾向于用那种编程语言中他们熟悉的上下文中相似的方法给这些操作符命名。本文首先会给出ReactiveX的核心操作符列表和对应的文档链接，后面还有一个决策树用于帮助你根据具体的场景选择合适的操">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxJava操作符分类">
+<meta property="og:url" content="http://auhah.cn/2016/05/20/[转载] RxJava操作符分类/index.html">
+<meta property="og:site_name" content="Android Developer">
+<meta property="og:description" content="本文转载自: LengYue’s Blog / RxJava操作符分类
+ReactiveX的每种编程语言的实现都实现了一组操作符的集合。不同的实现之间有很多重叠的部分，也有一些操作符只存在特定的实现中。每种实现都倾向于用那种编程语言中他们熟悉的上下文中相似的方法给这些操作符命名。本文首先会给出ReactiveX的核心操作符列表和对应的文档链接，后面还有一个决策树用于帮助你根据具体的场景选择合适的操">
+<meta property="og:updated_time" content="2016-05-23T06:30:39.418Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RxJava操作符分类">
+<meta name="twitter:description" content="本文转载自: LengYue’s Blog / RxJava操作符分类
+ReactiveX的每种编程语言的实现都实现了一组操作符的集合。不同的实现之间有很多重叠的部分，也有一些操作符只存在特定的实现中。每种实现都倾向于用那种编程语言中他们熟悉的上下文中相似的方法给这些操作符命名。本文首先会给出ReactiveX的核心操作符列表和对应的文档链接，后面还有一个决策树用于帮助你根据具体的场景选择合适的操">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> RxJava操作符分类 | Android Developer </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-78050009-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Android Developer</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                RxJava操作符分类
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-20T17:13:49+08:00" content="2016-05-20">
+              2016-05-20
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/20/[转载] RxJava操作符分类/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/05/20/[转载] RxJava操作符分类/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>本文转载自: <a href="https://www.apkdv.com/rxjava-operator-classification/" target="_blank" rel="external">LengYue’s Blog / RxJava操作符分类</a></strong></p>
+<p>ReactiveX的每种编程语言的实现都实现了一组操作符的集合。不同的实现之间有很多重叠的部分，也有一些操作符只存在特定的实现中。每种实现都倾向于用那种编程语言中他们熟悉的上下文中相似的方法给这些操作符命名。<br>本文首先会给出ReactiveX的核心操作符列表和对应的文档链接，后面还有一个决策树用于帮助你根据具体的场景选择合适的操作符。最后有一个语言特定实现的按字母排序的操作符列表。<br>如果你想实现你自己的操作符，可以参考这里：<a href="https://mcxiaoke.gitbooks.io/rxdocs/content/topics/Implementing-Your-Own-Operators.html" target="_blank" rel="external">实现自定义操作符</a><br><a id="more"></a></p>
+<h2 id="创建操作"><a href="#创建操作" class="headerlink" title="创建操作"></a>创建操作</h2><p>用于创建Observable的操作符</p>
+<ul>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Create.html" target="_blank" rel="external">Create</a> — 通过调用观察者的方法从头创建一个Observable</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Defer.html" target="_blank" rel="external">Defer</a> — 在观察者订阅之前不创建这个Observable，为每一个观察者创建一个新的Observable</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Empty.html" target="_blank" rel="external">Empty/Never/Throw</a> — 创建行为受限的特殊Observable</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/From.html" target="_blank" rel="external">From</a> — 将其它的对象或数据结构转换为Observable</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Interval.html" target="_blank" rel="external">Interval</a> — 创建一个定时发射整数序列的Observable</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Just.html" target="_blank" rel="external">Just</a> — 将对象或者对象集合转换为一个会发射这些对象的Observable</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Range.html" target="_blank" rel="external">Range</a> — 创建发射指定范围的整数序列的Observable</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Repeat.html" target="_blank" rel="external">Repeat</a> — 创建重复发射特定的数据或数据序列的Observable</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Start.html" target="_blank" rel="external">Start</a> — 创建发射一个函数的返回值的Observable</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Timer.html" target="_blank" rel="external">Timer</a> — 创建在一个指定的延迟之后发射单个数据的Observable</li>
+</ul>
+<h2 id="变换操作"><a href="#变换操作" class="headerlink" title="变换操作"></a>变换操作</h2><p>这些操作符可用于对Observable发射的数据进行变换，详细解释可以看每个操作符的文档</p>
+<ul>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Buffer.html" target="_blank" rel="external">Buffer</a> — 缓存，可以简单的理解为缓存，它定期从Observable收集数据到一个集合，然后把这些数据集合打包发射，而不是一次发射一个</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/FlatMap.html" target="_blank" rel="external">FlatMap</a> — 扁平映射，将Observable发射的数据变换为Observables集合，然后将这些Observable发射的数据平坦化的放进一个单独的Observable，可以认为是一个将嵌套的数据结构展开的过程。</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/GroupBy.html" target="_blank" rel="external">GroupBy</a> — 分组，将原来的Observable分拆为Observable集合，将原始Observable发射的数据按Key分组，每一个Observable发射一组不同的数据</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Map.html" target="_blank" rel="external">Map</a> — 映射，通过对序列的每一项都应用一个函数变换Observable发射的数据，实质是对序列中的每一项执行一个函数，函数的参数就是这个数据项</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Scan.html" target="_blank" rel="external">Scan</a> — 扫描，对Observable发射的每一项数据应用一个函数，然后按顺序依次发射这些值</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Window.html" target="_blank" rel="external">Window</a> — 窗口，定期将来自Observable的数据分拆成一些Observable窗口，然后发射这些窗口，而不是每次发射一项。类似于Buffer，但Buffer发射的是数据，Window发射的是Observable，每一个Observable发射原始Observable的数据的一个子集</li>
+</ul>
+<h2 id="过滤操作"><a href="#过滤操作" class="headerlink" title="过滤操作"></a>过滤操作</h2><p>这些操作符用于从Observable发射的数据中进行选择</p>
+<ul>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Debounce.html" target="_blank" rel="external">Debounce</a> — 只有在空闲了一段时间后才发射数据，通俗的说，就是如果一段时间没有操作，就执行一次操作</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Distinct.html" target="_blank" rel="external">Distinct</a> — 去重，过滤掉重复数据项</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/ElementAt.html" target="_blank" rel="external">ElementAt</a> — 取值，取特定位置的数据项</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Filter.html" target="_blank" rel="external">Filter</a> — 过滤，过滤掉没有通过谓词测试的数据项，只发射通过测试的</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/First.html" target="_blank" rel="external">First</a> — 首项，只发射满足条件的第一条数据</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/IgnoreElements.html" target="_blank" rel="external">IgnoreElements</a> — 忽略所有的数据，只保留终止通知(onError或onCompleted)</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Last.html" target="_blank" rel="external">Last</a> — 末项，只发射最后一条数据</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Sample.html" target="_blank" rel="external">Sample</a> — 取样，定期发射最新的数据，等于是数据抽样，有的实现里叫ThrottleFirst</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Skip.html" target="_blank" rel="external">Skip</a> — 跳过前面的若干项数据</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/SkipLast.html" target="_blank" rel="external">SkipLast</a> — 跳过后面的若干项数据</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Take.html" target="_blank" rel="external">Take</a> — 只保留前面的若干项数据</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/TakeLast.html" target="_blank" rel="external">TakeLast</a> — 只保留后面的若干项数据</li>
+</ul>
+<h2 id="组合操作"><a href="#组合操作" class="headerlink" title="组合操作"></a>组合操作</h2><p>组合操作符用于将多个Observable组合成一个单一的Observable</p>
+<ul>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/And.html" target="_blank" rel="external">And/Then/When</a> — 通过模式(And条件)和计划(Then次序)组合两个或多个Observable发射的数据集</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/CombineLatest.html" target="_blank" rel="external">CombineLatest</a> — 当两个Observables中的任何一个发射了一个数据时，通过一个指定的函数组合每个Observable发射的最新数据（一共两个数据），然- 后发射这个函数的结果</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Join.html" target="_blank" rel="external">Join</a> — 无论何时，如果一个Observable发射了一个数据项，只要在另一个Observable发射的数据项定义的时间窗口内，就将两个Observable发射的数据合并发射</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Merge.html" target="_blank" rel="external">Merge</a> — 将两个Observable发射的数据组合并成一个</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/StartWith.html" target="_blank" rel="external">StartWith</a> — 在发射原来的Observable的数据序列之前，先发射一个指定的数据序列或数据项</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Switch.html" target="_blank" rel="external">Switch</a> — 将一个发射Observable序列的Observable转换为这样一个Observable：它逐个发射那些Observable最近发射的数据</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Zip.html" target="_blank" rel="external">Zip</a> — 打包，使用一个指定的函数将多个Observable发射的数据组合在一起，然后将这个函数的结果作为单项数据发射</li>
+</ul>
+<h2 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h2><p>这些操作符用于从错误通知中恢复</p>
+<ul>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Catch.html" target="_blank" rel="external">Catch</a> — 捕获，继续序列操作，将错误替换为正常的数据，从onError通知中恢复</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Retry.html" target="_blank" rel="external">Retry</a> — 重试，如果Observable发射了一个错误通知，重新订阅它，期待它正常终止</li>
+</ul>
+<h2 id="辅助操作"><a href="#辅助操作" class="headerlink" title="辅助操作"></a>辅助操作</h2><p>一组用于处理Observable的操作符</p>
+<ul>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Delay.html" target="_blank" rel="external">Delay</a> — 延迟一段时间发射结果数据</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Do.html" target="_blank" rel="external">Do</a> — 注册一个动作占用一些Observable的生命周期事件，相当于Mock某个操作</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Materialize.html" target="_blank" rel="external">Materialize/Dematerialize</a> — 将发射的数据和通知都当做数据发射，或者反过来</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/ObserveOn.html" target="_blank" rel="external">ObserveOn</a> — 指定观察者观察Observable的调度程序（工作线程）</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Serialize.html" target="_blank" rel="external">Serialize</a> — 强制Observable按次序发射数据并且功能是有效的</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Subscribe.html" target="_blank" rel="external">Subscribe</a> — 收到Observable发射的数据和通知后执行的操作</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/SubscribeOn.html" target="_blank" rel="external">SubscribeOn</a> — 指定Observable应该在哪个调度程序上执行</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/TimeInterval.html" target="_blank" rel="external">TimeInterval</a> — 将一个Observable转换为发射两个数据之间所耗费时间的Observable</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Timeout.html" target="_blank" rel="external">Timeout</a> — 添加超时机制，如果过了指定的一段时间没有发射数据，就发射一个错误通知</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Timestamp.html" target="_blank" rel="external">Timestamp</a> — 给Observable发射的每个数据项添加一个时间戳</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Using.html" target="_blank" rel="external">Using</a> — 创建一个只在Observable的生命周期内存在的一次性资源</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/To.html" target="_blank" rel="external">To</a> - 将Observable转换为另一个对象或数据结构</li>
+</ul>
+<h2 id="条件和布尔操作"><a href="#条件和布尔操作" class="headerlink" title="条件和布尔操作"></a>条件和布尔操作</h2><p>这些操作符可用于单个或多个数据项，也可用于Observable</p>
+<ul>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Conditional.html" target="_blank" rel="external">All</a> — 判断Observable发射的所有的数据项是否都满足某个条件</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Conditional.html" target="_blank" rel="external">Amb</a> — 给定多个Observable，只让第一个发射数据的Observable发射全部数据</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Conditional.html" target="_blank" rel="external">Contains</a> — 判断Observable是否会发射一个指定的数据项</li>
+<li><a href="">DefaultIfEmpty</a> — 发射来自原始Observable的数据，如果原始Observable没有发射数据，就发射一个默认数据</li>
+<li><a href="">SequenceEqual</a> — 判断两个Observable是否按相同的数据序列</li>
+<li><a href="">SkipUntil</a> — 丢弃原始Observable发射的数据，直到第二个Observable发射了一个数据，然后发射原始Observable的剩余数据</li>
+<li><a href="">SkipWhile</a> — 丢弃原始Observable发射的数据，直到一个特定的条件为假，然后发射原始Observable剩余的数据</li>
+<li><a href="">TakeUntil</a> — 发射来自原始Observable的数据，直到第二个Observable发射了一个数据或一个通知</li>
+<li><a href="">TakeWhile</a> — 发射原始Observable的数据，直到一个特定的条件为真，然后跳过剩余的数据</li>
+</ul>
+<h2 id="算术和聚合操作"><a href="#算术和聚合操作" class="headerlink" title="算术和聚合操作"></a><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Mathematical.html" target="_blank" rel="external">算术和聚合操作</a></h2><p>这些操作符可用于整个数据序列<br>Average — 计算Observable发射的数据序列的平均值，然后发射这个结果<br>Concat — 不交错的连接多个Observable的数据<br>Count — 计算Observable发射的数据个数，然后发射这个结果<br>Max — 计算并发射数据序列的最大值<br>Min — 计算并发射数据序列的最小值<br>Reduce — 按顺序对数据序列的每一个应用某个函数，然后返回这个值<br>Sum — 计算并发射数据序列的和</p>
+<h2 id="连接操作"><a href="#连接操作" class="headerlink" title="连接操作"></a>连接操作</h2><p>一些有精确可控的订阅行为的特殊Observable</p>
+<ul>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Connect.html" target="_blank" rel="external">Connect</a> — 指示一个可连接的Observable开始发射数据给订阅者</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Publish.html" target="_blank" rel="external">Publish</a> — 将一个普通的Observable转换为可连接的</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/RefCount.html" target="_blank" rel="external">RefCount</a> — 使一个可连接的Observable表现得像一个普通的Observable</li>
+<li><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/operators/Replay.html" target="_blank" rel="external">Replay</a> — 确保所有的观察者收到同样的数据序列，即使他们在Observable开始发射数据之后才订阅</li>
+</ul>
+<h2 id="转换操作"><a href="#转换操作" class="headerlink" title="转换操作"></a>转换操作</h2><ul>
+<li><a href="">To</a> — 将Observable转换为其它的对象或数据结构</li>
+<li><a href="">Blocking</a> 阻塞Observable的操作符</li>
+</ul>
+<h2 id="操作符决策树"><a href="#操作符决策树" class="headerlink" title="操作符决策树"></a>操作符决策树</h2><p>几种主要的需求<br>直接创建一个Observable（创建操作）<br>组合多个Observable（组合操作）<br>对Observable发射的数据执行变换操作（变换操作）<br>从Observable发射的数据中取特定的值（过滤操作）<br>转发Observable的部分值（条件/布尔/过滤操作）<br>对Observable发射的数据序列求值（算术/聚合操作）</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RxJava/" rel="tag">#RxJava</a>
+          
+            <a href="/tags/转载/" rel="tag">#转载</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/20/Recycler-自定义-ItemDecoration/" rel="next" title="Recycler 自定义 ItemDecoration">
+                <i class="fa fa-chevron-left"></i> Recycler 自定义 ItemDecoration
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/23/Android-tools命名空间介绍/" rel="prev" title="[Android] tools命名空间介绍">
+                [Android] tools命名空间介绍 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://o7gnfawoo.bkt.clouddn.com/ava.png"
+               alt="auhah" />
+          <p class="site-author-name" itemprop="name">auhah</p>
+          <p class="site-description motion-element" itemprop="description">throw NoGirlFriendException</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/auhah" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建操作"><span class="nav-number">1.</span> <span class="nav-text">创建操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变换操作"><span class="nav-number">2.</span> <span class="nav-text">变换操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过滤操作"><span class="nav-number">3.</span> <span class="nav-text">过滤操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组合操作"><span class="nav-number">4.</span> <span class="nav-text">组合操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#错误处理"><span class="nav-number">5.</span> <span class="nav-text">错误处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#辅助操作"><span class="nav-number">6.</span> <span class="nav-text">辅助操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件和布尔操作"><span class="nav-number">7.</span> <span class="nav-text">条件和布尔操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算术和聚合操作"><span class="nav-number">8.</span> <span class="nav-text">算术和聚合操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连接操作"><span class="nav-number">9.</span> <span class="nav-text">连接操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转换操作"><span class="nav-number">10.</span> <span class="nav-text">转换操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作符决策树"><span class="nav-number">11.</span> <span class="nav-text">操作符决策树</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">auhah</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'auhah';
+      var disqus_identifier = '2016/05/20/[转载] RxJava操作符分类/';
+      var disqus_title = 'RxJava操作符分类';
+      var disqus_url = 'http://auhah.cn/2016/05/20/[转载] RxJava操作符分类/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
