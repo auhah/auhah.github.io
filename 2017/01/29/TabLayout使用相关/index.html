@@ -84,16 +84,16 @@
 
 
 
-<meta name="description" content="TabLayout 使用相关记录一下项目中遇到的问题的解决方案">
+<meta name="description" content="记录一下项目中遇到的问题的解决方案">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TabLayout使用相关">
 <meta property="og:url" content="http://auhah.cn/2017/01/29/TabLayout使用相关/index.html">
 <meta property="og:site_name" content="Android Developer">
-<meta property="og:description" content="TabLayout 使用相关记录一下项目中遇到的问题的解决方案">
-<meta property="og:updated_time" content="2017-01-29T15:31:24.000Z">
+<meta property="og:description" content="记录一下项目中遇到的问题的解决方案">
+<meta property="og:updated_time" content="2017-01-29T15:39:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TabLayout使用相关">
-<meta name="twitter:description" content="TabLayout 使用相关记录一下项目中遇到的问题的解决方案">
+<meta name="twitter:description" content="记录一下项目中遇到的问题的解决方案">
 
 
 
@@ -317,7 +317,7 @@
       
 
       
-        <h1 id="TabLayout-使用相关"><a href="#TabLayout-使用相关" class="headerlink" title="TabLayout 使用相关"></a>TabLayout 使用相关</h1><p>记录一下项目中遇到的问题的解决方案</p>
+        <p>记录一下项目中遇到的问题的解决方案</p>
 <a id="more"></a>
 <h2 id="计算-TabLayout-的展现模式"><a href="#计算-TabLayout-的展现模式" class="headerlink" title="计算 TabLayout 的展现模式"></a>计算 TabLayout 的展现模式</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dynamicSetTabLayoutMode</span><span class="params">(TabLayout tabLayout)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> tabTotalWidth = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">int</span> tabWidth = tabLayout.getMeasuredWidth();</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; tabLayout.getChildCount(); i++) &#123;</span><br><span class="line">    <span class="keyword">final</span> View view = tabLayout.getChildAt(i);</span><br><span class="line">    view.measure(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    tabTotalWidth += view.getMeasuredWidth();</span><br><span class="line">    <span class="keyword">if</span> (tabTotalWidth &gt; tabWidth) <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (tabTotalWidth &lt;= tabWidth) &#123;</span><br><span class="line">    tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);</span><br><span class="line">    tabLayout.setTabMode(TabLayout.MODE_FIXED);</span><br><span class="line">    <span class="comment">// updateTabWeight(true);</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);</span><br><span class="line">    tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);</span><br><span class="line">    <span class="comment">// updateTabWeight(false);</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="模式为-Scrollable-时，tab-中文字数量太多的话-tab-宽度无法自适应"><a href="#模式为-Scrollable-时，tab-中文字数量太多的话-tab-宽度无法自适应" class="headerlink" title="模式为 Scrollable 时，tab 中文字数量太多的话 tab 宽度无法自适应"></a>模式为 Scrollable 时，tab 中文字数量太多的话 tab 宽度无法自适应</h2><p>设置如下属性实现自适应<br><code>app:tabMinWidth=&quot;34dp&quot;</code></p>
@@ -492,7 +492,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TabLayout-使用相关"><span class="nav-number">1.</span> <span class="nav-text">TabLayout 使用相关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#计算-TabLayout-的展现模式"><span class="nav-number">1.1.</span> <span class="nav-text">计算 TabLayout 的展现模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模式为-Scrollable-时，tab-中文字数量太多的话-tab-宽度无法自适应"><span class="nav-number">1.2.</span> <span class="nav-text">模式为 Scrollable 时，tab 中文字数量太多的话 tab 宽度无法自适应</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模式为-Fixed-时，tab-宽度无法自适应"><span class="nav-number">1.3.</span> <span class="nav-text">模式为 Fixed 时，tab 宽度无法自适应</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#计算-TabLayout-的展现模式"><span class="nav-number">1.</span> <span class="nav-text">计算 TabLayout 的展现模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模式为-Scrollable-时，tab-中文字数量太多的话-tab-宽度无法自适应"><span class="nav-number">2.</span> <span class="nav-text">模式为 Scrollable 时，tab 中文字数量太多的话 tab 宽度无法自适应</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模式为-Fixed-时，tab-宽度无法自适应"><span class="nav-number">3.</span> <span class="nav-text">模式为 Fixed 时，tab 宽度无法自适应</span></a></li></ol></div>
             
           </div>
         </section>
